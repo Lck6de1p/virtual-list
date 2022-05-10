@@ -7,6 +7,7 @@ import {
   watchEffect,
   onUnmounted,
 } from "vue";
+import { useEventListener } from "../composables/event";
 
 const props = defineProps({
   listData: Array,
@@ -65,16 +66,11 @@ watchEffect(() => {
       // 设置列表总高度 = 一行高度 * 行数
       const listH = data.unitH * props.listData.length;
       ulRef.value.style.setProperty("height", `${listH}px`);
-      
-      window.removeEventListener("scroll", scrollHandler);
-      window.addEventListener("scroll", scrollHandler);
     });
   }
 });
 
-onUnmounted(() => {
-  window.removeEventListener("scroll", scrollHandler);
-});
+useEventListener(window, "scroll", scrollHandler);
 </script>
 <template>
   <ul ref="ulRef">
